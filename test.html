@@ -1,0 +1,8 @@
+<script>
+function camelCase(input) { 
+    return input.toLowerCase().replace(/-(.)/g, function(match, group1) {
+        return group1.toUpperCase();
+    });
+}
+alert(camelCase("gadget-currency-chart-qwe"));
+</script>

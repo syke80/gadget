@@ -1,0 +1,104 @@
+/**
+ * config service
+ */
+var ConfigService = function() {
+	data : []
+}
+
+	property: function(elem, key, value) {
+		var id = elem.attr("data-gadget-id");
+		var idx = this.getIndexFromId(id);
+
+		if ( value !== undefined ) {
+			var logStr = "sets #"+id+" element's "+key+" key to "+value+" ";
+			if (this.data[idx] == undefined) logStr += "undefined id";
+			else if (this.data[idx][key] == undefined) logStr += "undefined key";
+			else this.data[idx][key] = value;
+			console.log(logStr);
+		}
+		else {
+			var logStr = "returns #"+id+" element's "+key+" key: ";
+			if (this.data[idx] == undefined) logStr += "undefined id";
+			else if (this.data[idx][key] == undefined) logStr += "undefined key";
+			else logStr += this.data[idx][key];
+			console.log(logStr);
+
+			if (this.data[idx] !== undefined && this.data[idx][key] !== undefined) {
+				return this.data[idx][key];
+			}
+			else {
+				return false;
+			}
+		}
+	},
+	add: function(defaults) {
+		this.data.push(defaults);
+	},
+	count: function() {
+		console.log("this-config", this);
+		return this.data.length;
+	},
+	getFromIndex: function(configIdx) {
+		return this.data[configIdx];
+	},
+	getIndexFromId: function(id) {
+		for (i in this.data) {
+			if (this.data[i].id == id) return i;
+		}
+		return false;
+	},
+	getFromId: function(id) {
+		for (i in this.data) {
+			if (this.data[i].id == id) return this.data[i];
+		}
+		return false;
+	},
+
+	removeGadget: function(id) {
+		console.log("remove element", id);
+		var idx = this.getIndexFromId(id);
+		this.data.splice(idx, 1);
+		console.log("data after remove", this.data);
+	},
+
+	save: function() {
+		console.log("save data", this.data);
+		// Get x and y coordinates
+		for (i in this.data) {
+			var gadget = $(".gadget[data-gadget-id="+this.data[i].id+"]");
+			if (gadget.length > 0) {
+				// Get the parent's offset (container)
+				var offset = gadget.parent().offset();
+				this.data[i].top = offset.top;
+				this.data[i].left = offset.left;
+			}
+		}
+
+		// Send config to server
+		$.ajax({
+			url: "gadget.php",
+			data: {
+				config: JSON.stringify(this.data)
+			},
+			type: "PUT"
+		});
+	},
+
+	load: function(callback) {
+		console.log("load data");
+		$.ajax({
+			context: this,
+			url: "gadget.php",
+			dataType: "json", 
+			success: function(dataFromServer) {
+				console.log("loaded data", dataFromServer);
+				this.data = dataFromServer;
+				callback();
+			}
+		});
+	},
+	setConfig: function(data, callback) {
+		console.log("loaded data", data);
+		this.data = data;
+		callback();
+	}

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+		itt van par otlet: http://www.dwtutorials.com/tutorials/index.php?option=com_content&view=article&id=6216:showcase-of-macintosh-dashboard-widget-ui-designs&catid=98:web-design
+-->
+	<head>
+	<title>Gadget</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" type="text/css" href="css/main.css">
+		<link rel="stylesheet" type="text/css" href="css/theme-clean.css">
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+		<script src="js/jquery.cookie.js"></script>
+		<script src="js/jquery.simplebox.js"></script>
+		<script src="js/jquery.imgreplace.js"></script>
+		<script src="js/serialize.js"></script>
+		<script src="app/ConfigService.js"></script>
+		<script src="app/Gadget.js"></script>
+	  	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css" />
+	</head>
+	<body class="theme-clean">
+	<div id="container">
+	<script>
+		var unit = 95;
+		var gadgets = [];
+		var configService = new ConfigService();
+		
+		function gadgetReload(elem) {
+			var id = elem.attr("data-gadget-id");
+			console.log("Reloading "+id);
+			gadgetLoad(configService.getIndexFromId(id));
+		}
+
+		function gadgetLoadAll() {
+			var gadgetCount = configService.count();
+			for (i=0; i<gadgetCount; i++) {
+				if (configService.getFromIndex(i) != null) {
+					gadgets.push(new Gadget(i));
+				}
+			}
+		}
+
+		function loadAddBox() {
+			$.get(
+				"list.php",
+				{},
+				function(data) {
+					var boxContent = "";
+					for (i in data) {
+						boxContent += "<button data-gadget=\""+data[i]+"\"><img src=\"gadgets/"+data[i]+"/icon.png\" alt=\""+data[i]+"\" /><span class=\"name\">"+data[i]+"</span></button>";
+					}
+					$("#add").append(boxContent);
+					$("#add button").click( function() {
+						// Load default settings, push gadget into the config, load gadget
+						var gadgetName = $(this).attr("data-gadget");
+						$.ajax({
+							url: "gadgets/"+gadgetName+"/defaults.json",
+							dataType: "json",
+							success: function(defaults) {
+								defaults.name = gadgetName;
+								defaults.id = Date.now()
+								configService.add(defaults);
+								gadgetLoad(configService.count()-1);
+							},
+							error: function(jqXHR, textStatus, errorThrown) {
+								console.log("Cannot load "+gadgetName+"'s defaults: "+textStatus);
+							}
+						});
+					});
+				},
+				"json"
+			);
+		}
+
+		configService.load( function() {
+			gadgetLoadAll();
+		});
+		loadAddBox();
+	</script>
+	</div>
+	<div id="add"></div>
+	</body>
+</html>

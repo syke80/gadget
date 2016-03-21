@@ -1,0 +1,9 @@
+{
+	"width": 2,
+	"height": 2,
+	"list": ["EUR","USD","GBP"],
+	"lastnumber": {
+		"currency": "EUR",
+		"value": 1
+	}
+}

@@ -1,0 +1,42 @@
+<style>
+	.gadget-weather .current .icon { position: absolute; top: 10px; left: 10px; }
+	.gadget-weather .current .temp { position: absolute; top: 10px; right: 10px; font-size: 24px; }
+	.gadget-weather .current .feelslike { position: absolute; top: 40px; right: 10px; font-size: 18px; }
+	.gadget-weather .current .city { position: absolute; bottom: 10px; right: 10px; font-size: 18px; }
+	.gadget-weather .current .state_name { position: absolute; bottom: 28px; right: 10px; font-size: 11px; }
+	.gadget-weather .forecast { position: absolute; top: 75px; left: 13px; }
+	.gadget-weather .forecast .day { position: relative; width: 35px; height: 65px; float: left; font-size: 12px; }
+	.gadget-weather .forecast .day7 { display: none; }
+	.gadget-weather .forecast .day8 { display: none; }
+	.gadget-weather .forecast .day9 { display: none; }
+	.gadget-weather .forecast .day .icon { position: absolute; top: 10px; width: 30px; }
+	.gadget-weather .forecast .day .high { position: absolute; top: 35px; left: 0px; color: #ffdd99; text-align: center; display: block; width: 100%; }
+	.gadget-weather .forecast .day .low { position: absolute; bottom: 0px; left: 0px; color: #9999ff; text-align: center; display: block; width: 100%; }
+	.gadget-weather .forecast .day .name { display: none; }
+	.gadget-weather .forecast .day .name_short { position: absolute; top: 0px; left: 0px; text-align: center; display: block; width: 100%; height: 15px; }
+	.gadget-weather .forecast .day .name_short .bg { position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; opacity: 0.2; background: #ffffff; }
+	.gadget-weather .wind { position: absolute; top: 15px; left: 110px; text-align: center; }
+	/*
+	.gadget-weather .wind:after { content: url(gadgets/weather/images/arrow.png); transform: rotate(attr(data-degrees)deg)}
+	*/
+	.gadget-weather .wind:after { content: url(gadgets/weather/images/arrow.png); display: block; transform: rotate( attr(data-degrees) ); }
+	.gadget-weather .wind .value { display: block; font-size: 12px; }
+
+	/*
+	.gadget-weather.small { ... }
+	*/
+
+</style>
+<div class="current">
+	<img class="icon" />
+	<span class="wind">
+		<img style="display: none" src="gadgets/weather/images/arrow.png" />
+		<span class="value"></span>
+	</span>
+	<span class="temp"></span>
+	<span class="feelslike"></span>
+	<span class="city"></span>
+	<span class="state_name"></span>
+</div>
+<div class="forecast">
+</div>

@@ -1,0 +1,2 @@
+1. fix adatokkal lekerni az idojarast
+2. settings oldal: varos bekerese, autosuggest
